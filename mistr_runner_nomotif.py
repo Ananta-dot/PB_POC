@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# PatternBoost MISR search with optional motif usage
-#   --motif_mode {both,seed,refresh,off}
-#   both     -> use motifs at initial seeding and per-round refresh (default; old behavior)
-#   seed     -> use motifs only at initial seeding
-#   refresh  -> use motifs only at per-round refresh
-#   off      -> disable motifs entirely
-
 from __future__ import annotations
 
 import argparse

@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+import pickle
 import argparse
 import math
 import os
@@ -20,9 +20,7 @@ from gurobipy import GRB
 
 warnings.filterwarnings("ignore", message=r".*TF32 behavior.*", category=UserWarning)
 
-# =========================
-# Device selection (MPS friendly)
-# =========================
+# gpu if available
 def get_device():
     if torch.cuda.is_available():
         return torch.device("cuda")
@@ -37,15 +35,38 @@ if hasattr(torch, "set_float32_matmul_precision"):
     except Exception:
         pass
 
-# =========================
-# Representation & utils
-# =========================
 Seq = List[int]
 Instance = Tuple[Seq, Seq]
 
 SPECIAL = {"BOS": 0, "SEP": 1, "EOS": 2}
 BASE_VOCAB = 3
 MAX_N = 128  # safety ceiling
+
+def load_seeds_from_pkl(seed_pkl: str, n: int, top_k: int = 10) -> List[Instance]:
+    """
+    Read a pickle that contains either:
+      - [(ratio, H, V), ...]  or
+      - [(H, V), ...]
+    and return up to top_k (H,V) with max(H)==n.
+    """
+    try:
+        with open(seed_pkl, "rb") as f:
+            data = pickle.load(f)
+    except Exception:
+        return []
+    bag = []
+    for item in data:
+        if isinstance(item, (list, tuple)):
+            if len(item) >= 3 and isinstance(item[1], list) and isinstance(item[2], list):
+                ratio, H, V = item[:3]
+                if H and max(H) == n:
+                    bag.append((float(ratio), H, V))
+            elif len(item) == 2 and isinstance(item[0], list) and isinstance(item[1], list):
+                H, V = item
+                if H and max(H) == n:
+                    bag.append((0.0, H, V))
+    bag.sort(key=lambda t: -t[0])
+    return [(H[:], V[:]) for _, H, V in bag[:top_k]]
 
 def seeded_pool(n: int, rng: random.Random, base_count: int) -> List[Instance]:
     """Motif injections + random pairs; includes corner-heavy combos."""
@@ -71,7 +92,6 @@ def seeded_pool(n: int, rng: random.Random, base_count: int) -> List[Instance]:
         seeds.append((random_valid_seq(n, rng), random_valid_seq(n, rng)))
 
     return seeds[:base_count]
-
 
 def seq_spans(seq: Seq) -> List[Tuple[int, int]]:
     """Return [l_i, r_i] (indices of the two occurrences) for labels i=1..n."""
@@ -106,7 +126,6 @@ def random_valid_seq(n: int, rng: random.Random) -> Seq:
     rng.shuffle(seq)
     return seq
 
-# ===== motifs (deterministic seeds + corner-heavy gadgets) =====
 def motif_rainbow(n: int) -> Seq:
     # [1,2,...,n, n,...,2,1]
     return list(range(1, n+1)) + list(range(n, 0, -1))
@@ -188,7 +207,6 @@ def motif_seeds(n: int) -> List[Seq]:
     return out
 
 def lift_instance(H: Seq, V: Seq, n_new: int, rng: random.Random) -> Instance:
-    """Insert pairs of new labels near congested areas (curriculum)."""
     assert n_new >= max(H)
     H2, V2 = H[:], V[:]
 
@@ -220,9 +238,6 @@ def lift_instance(H: Seq, V: Seq, n_new: int, rng: random.Random) -> Instance:
             seq.insert(i, lab); seq.insert(j, lab)
     return canonicalize(H2, V2)
 
-# =========================
-# Exact evaluator (CLOSED rectangles + FULL GRID constraints)
-# =========================
 Rect = Tuple[Tuple[int,int], Tuple[int,int]]  # ((x1,x2),(y1,y2)) with x1<=x2, y1<=y2
 
 def build_rects(H: Seq, V: Seq) -> List[Rect]:
@@ -290,13 +305,12 @@ def score_ratio(H: Seq, V: Seq,
     blended = ratio + alpha_lp * (lp / n) - beta_ilp * (ilp / n)
     return lp, ilp, ratio, blended
 
-# =========================
-# Local search (tabu + greedy, richer neighbors)
-# =========================
 def neighbors(H: Seq, V: Seq, rng: random.Random, k: int = 96) -> List[Instance]:
     out=[]
     L = len(H)
-    moves = ['swapH','swapV','moveH','moveV','blockH','blockV','revH','revV','pairH','pairV']
+    # In neighbors(...), extend 'moves':
+    moves = ['swapH','swapV','moveH','moveV','blockH','blockV','revH','revV','pairH','pairV','pairHV']
+
     for _ in range(k):
         which = rng.choice(moves)
         A = H[:] if 'H' in which else V[:]
@@ -311,6 +325,29 @@ def neighbors(H: Seq, V: Seq, rng: random.Random, k: int = 96) -> List[Instance]
             if a!=b:
                 blk = A[a:b+1]; del A[a:b+1]
                 t = rng.randrange(len(A)+1); A[t:t]=blk
+        elif which == 'pairHV':
+        # swap the pair positions of two labels in BOTH H and V
+            labs = list(set(H) & set(V))
+            if len(labs) >= 2:
+                a_lab, b_lab = rng.sample(labs, 2)
+                for S in (H[:], V[:]):
+                    pa = [idx for idx,x in enumerate(S) if x==a_lab]
+                    pb = [idx for idx,x in enumerate(S) if x==b_lab]
+                    if len(pa)==2 and len(pb)==2:
+                        for ia, ib in zip(pa, pb):
+                            S[ia], S[ib] = S[ib], S[ia]
+                # apply to both sides atomically
+                AH, AV = H[:], V[:]
+                for S in (AH,):
+                    pa = [i for i,x in enumerate(S) if x==a_lab]
+                    pb = [i for i,x in enumerate(S) if x==b_lab]
+                    for ia, ib in zip(pa, pb): S[ia], S[ib] = S[ib], S[ia]
+                for S in (AV,):
+                    pa = [i for i,x in enumerate(S) if x==a_lab]
+                    pb = [i for i,x in enumerate(S) if x==b_lab]
+                    for ia, ib in zip(pa, pb): S[ia], S[ib] = S[ib], S[ia]
+                out.append(canonicalize(AH, AV))
+                continue
         elif which.startswith('rev'):
             a,b = (i,j) if i<j else (j,i)
             if a!=b:
@@ -403,9 +440,6 @@ def local_search(seed: Instance,
     elites_sorted = sorted(elites, key=lambda x: -x[0])
     return elites_sorted, best
 
-# =========================
-# Tiny Transformer proposer (encoder-only, causal)
-# =========================
 class PositionalEncoding(nn.Module):
     def __init__(self, d_model: int, max_len: int = 4096):
         super().__init__()
@@ -531,8 +565,6 @@ def sample_model(model: TinyGPT, n: int,
     H = tokens_to_seq(H_tok); V = tokens_to_seq(V_tok)
     return canonicalize(H,V)
 
-# -------------------------
-# stable helper (explicit train step)
 def train_one_step(model: nn.Module, opt: torch.optim.Optimizer, batch):
     model.train()
     logits = model(batch.tokens, batch.n_scalar)
@@ -547,9 +579,7 @@ def train_one_step(model: nn.Module, opt: torch.optim.Optimizer, batch):
     opt.step()
     return float(loss.item())
 
-# =========================
-# PatternBoost Runner (I/O scaffolding added)
-# =========================
+# PatternBoost 
 def elites_for_n(elites: List[Tuple[float, Seq, Seq]], n: int) -> List[Tuple[float, Seq, Seq]]:
     return [e for e in elites if e[1] and max(e[1]) == n]
 
@@ -595,15 +625,15 @@ def run_patternboost(
     train_steps_per_round: int = 60,
     temperature: float = 1.0,
     top_p: float = 0.9,
-    # search shaping
     alpha_lp: float = 0.15,
     beta_ilp: float = 0.10,
     grb_threads: int = 0,
     lift_step: int = 3,
-    # I/O
     out_root: str = "runs",
+    # NEW:
+    seed_pkl: str = "",
+    seed_top_k: int = 4,
 ):
-
     rng = random.Random(seed)
     torch.manual_seed(seed)
 
@@ -637,6 +667,12 @@ def run_patternboost(
     n = n_start
     best_overall = 0.0
     seeds = seeded_pool(n, rng, seeds_per_round)
+    if seed_pkl:
+        injected = load_seeds_from_pkl(seed_pkl, n, top_k=seed_top_k)
+        if injected:
+            take = min(len(injected), seeds_per_round)
+            seeds = injected[:take] + seeds[:max(0, seeds_per_round - take)]
+            print(f"[seed_inject] loaded {len(injected)} seeds from {seed_pkl} for n={n}")
 
     while n <= n_target:
         n_dir = os.path.join(run_dir, f"n{n:02d}")
@@ -744,9 +780,7 @@ def run_patternboost(
 
     return elites, run_dir
 
-# =========================
 # CLI
-# =========================
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--seed", type=int, default=123)
@@ -766,6 +800,10 @@ def main():
     ap.add_argument("--lift_step", type=int, default=3)
     ap.add_argument("--out_root", type=str, default="runs",
                     help="root directory for run outputs (a timestamped subdir will be created)")
+    ap.add_argument("--seed_pkl", type=str, default="",
+                    help="Optional pickle with seeds; each item is (ratio,H,V) or (H,V)")
+    ap.add_argument("--seed_top_k", type=int, default=4,
+                    help="How many seeds to inject at n_start")
 
     args = ap.parse_args()
 
@@ -787,6 +825,8 @@ def main():
         grb_threads=args.grb_threads,
         lift_step=args.lift_step,
         out_root=args.out_root,
+        seed_pkl=args.seed_pkl,
+        seed_top_k=args.seed_top_k,
     )
 
 if __name__ == "__main__":
