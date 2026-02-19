@@ -794,8 +794,8 @@ def main():
     ap.add_argument("--train_steps_per_round", type=int, default=60)
     ap.add_argument("--temperature", type=float, default=1.0)
     ap.add_argument("--top_p", type=float, default=0.9)
-    ap.add_argument("--alpha_lp", type=float, default=0.15)
-    ap.add_argument("--beta_ilp", type=float, default=0.10)
+    ap.add_argument("--alpha_lp", type=float, default=0.25)
+    ap.add_argument("--beta_ilp", type=float, default=0.20)
     ap.add_argument("--grb_threads", type=int, default=0)
     ap.add_argument("--lift_step", type=int, default=3)
     ap.add_argument("--out_root", type=str, default="runs",

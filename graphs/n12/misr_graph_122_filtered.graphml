@@ -1,0 +1,306 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d15" for="edge" attr.name="y_rel" attr.type="string" />
+  <key id="d14" for="edge" attr.name="x_rel" attr.type="string" />
+  <key id="d13" for="edge" attr.name="oy" attr.type="double" />
+  <key id="d12" for="edge" attr.name="ox" attr.type="double" />
+  <key id="d11" for="edge" attr.name="kind" attr.type="string" />
+  <key id="d10" for="node" attr.name="ilp" attr.type="long" />
+  <key id="d9" for="node" attr.name="lp" attr.type="double" />
+  <key id="d8" for="node" attr.name="area" attr.type="long" />
+  <key id="d7" for="node" attr.name="height" attr.type="long" />
+  <key id="d6" for="node" attr.name="width" attr.type="long" />
+  <key id="d5" for="node" attr.name="y2" attr.type="long" />
+  <key id="d4" for="node" attr.name="y1" attr.type="long" />
+  <key id="d3" for="node" attr.name="x2" attr.type="long" />
+  <key id="d2" for="node" attr.name="x1" attr.type="long" />
+  <key id="d1" for="node" attr.name="original_index" attr.type="long" />
+  <key id="d0" for="graph" attr.name="title" attr.type="string" />
+  <graph edgedefault="undirected">
+    <node id="1">
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">25</data>
+      <data key="d4">16</data>
+      <data key="d5">17</data>
+      <data key="d6">25</data>
+      <data key="d7">1</data>
+      <data key="d8">25</data>
+      <data key="d9">0.5</data>
+      <data key="d10">1</data>
+    </node>
+    <node id="2">
+      <data key="d1">2</data>
+      <data key="d2">1</data>
+      <data key="d3">13</data>
+      <data key="d4">18</data>
+      <data key="d5">22</data>
+      <data key="d6">12</data>
+      <data key="d7">4</data>
+      <data key="d8">48</data>
+      <data key="d9">0.5</data>
+      <data key="d10">1</data>
+    </node>
+    <node id="3">
+      <data key="d1">3</data>
+      <data key="d2">2</data>
+      <data key="d3">27</data>
+      <data key="d4">1</data>
+      <data key="d5">6</data>
+      <data key="d6">25</data>
+      <data key="d7">5</data>
+      <data key="d8">125</data>
+      <data key="d9">0.5</data>
+      <data key="d10">1</data>
+    </node>
+    <node id="6">
+      <data key="d1">6</data>
+      <data key="d2">5</data>
+      <data key="d3">8</data>
+      <data key="d4">11</data>
+      <data key="d5">23</data>
+      <data key="d6">3</data>
+      <data key="d7">12</data>
+      <data key="d8">36</data>
+      <data key="d9">0.5</data>
+      <data key="d10">0</data>
+    </node>
+    <node id="7">
+      <data key="d1">7</data>
+      <data key="d2">6</data>
+      <data key="d3">9</data>
+      <data key="d4">2</data>
+      <data key="d5">14</data>
+      <data key="d6">3</data>
+      <data key="d7">12</data>
+      <data key="d8">36</data>
+      <data key="d9">0.5</data>
+      <data key="d10">0</data>
+    </node>
+    <node id="8">
+      <data key="d1">8</data>
+      <data key="d2">7</data>
+      <data key="d3">16</data>
+      <data key="d4">8</data>
+      <data key="d5">9</data>
+      <data key="d6">9</data>
+      <data key="d7">1</data>
+      <data key="d8">9</data>
+      <data key="d9">0.5</data>
+      <data key="d10">1</data>
+    </node>
+    <node id="9">
+      <data key="d1">9</data>
+      <data key="d2">10</data>
+      <data key="d3">24</data>
+      <data key="d4">21</data>
+      <data key="d5">26</data>
+      <data key="d6">14</data>
+      <data key="d7">5</data>
+      <data key="d8">70</data>
+      <data key="d9">0.5</data>
+      <data key="d10">0</data>
+    </node>
+    <node id="10">
+      <data key="d1">10</data>
+      <data key="d2">11</data>
+      <data key="d3">12</data>
+      <data key="d4">0</data>
+      <data key="d5">19</data>
+      <data key="d6">1</data>
+      <data key="d7">19</data>
+      <data key="d8">19</data>
+      <data key="d9">0.5</data>
+      <data key="d10">0</data>
+    </node>
+    <node id="11">
+      <data key="d1">11</data>
+      <data key="d2">14</data>
+      <data key="d3">19</data>
+      <data key="d4">12</data>
+      <data key="d5">27</data>
+      <data key="d6">5</data>
+      <data key="d7">15</data>
+      <data key="d8">75</data>
+      <data key="d9">0.5</data>
+      <data key="d10">0</data>
+    </node>
+    <node id="12">
+      <data key="d1">12</data>
+      <data key="d2">15</data>
+      <data key="d3">26</data>
+      <data key="d4">7</data>
+      <data key="d5">10</data>
+      <data key="d6">11</data>
+      <data key="d7">3</data>
+      <data key="d8">33</data>
+      <data key="d9">0.5</data>
+      <data key="d10">0</data>
+    </node>
+    <node id="13">
+      <data key="d1">13</data>
+      <data key="d2">17</data>
+      <data key="d3">20</data>
+      <data key="d4">3</data>
+      <data key="d5">15</data>
+      <data key="d6">3</data>
+      <data key="d7">12</data>
+      <data key="d8">36</data>
+      <data key="d9">0.5</data>
+      <data key="d10">0</data>
+    </node>
+    <node id="14">
+      <data key="d1">14</data>
+      <data key="d2">21</data>
+      <data key="d3">22</data>
+      <data key="d4">4</data>
+      <data key="d5">25</data>
+      <data key="d6">1</data>
+      <data key="d7">21</data>
+      <data key="d8">21</data>
+      <data key="d9">0.5</data>
+      <data key="d10">0</data>
+    </node>
+    <edge source="1" target="6">
+      <data key="d11">proper</data>
+      <data key="d12">3.0</data>
+      <data key="d13">1.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">inside</data>
+    </edge>
+    <edge source="1" target="10">
+      <data key="d11">proper</data>
+      <data key="d12">1.0</data>
+      <data key="d13">1.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">inside</data>
+    </edge>
+    <edge source="1" target="11">
+      <data key="d11">proper</data>
+      <data key="d12">5.0</data>
+      <data key="d13">1.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">inside</data>
+    </edge>
+    <edge source="1" target="14">
+      <data key="d11">proper</data>
+      <data key="d12">1.0</data>
+      <data key="d13">1.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">inside</data>
+    </edge>
+    <edge source="2" target="6">
+      <data key="d11">proper</data>
+      <data key="d12">3.0</data>
+      <data key="d13">4.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">inside</data>
+    </edge>
+    <edge source="2" target="9">
+      <data key="d11">proper</data>
+      <data key="d12">3.0</data>
+      <data key="d13">1.0</data>
+      <data key="d14">overlap</data>
+      <data key="d15">overlap</data>
+    </edge>
+    <edge source="2" target="10">
+      <data key="d11">proper</data>
+      <data key="d12">1.0</data>
+      <data key="d13">1.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">overlap</data>
+    </edge>
+    <edge source="3" target="7">
+      <data key="d11">proper</data>
+      <data key="d12">3.0</data>
+      <data key="d13">4.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">overlap</data>
+    </edge>
+    <edge source="3" target="10">
+      <data key="d11">proper</data>
+      <data key="d12">1.0</data>
+      <data key="d13">5.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">inside</data>
+    </edge>
+    <edge source="3" target="13">
+      <data key="d11">proper</data>
+      <data key="d12">3.0</data>
+      <data key="d13">3.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">overlap</data>
+    </edge>
+    <edge source="3" target="14">
+      <data key="d11">proper</data>
+      <data key="d12">1.0</data>
+      <data key="d13">2.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">overlap</data>
+    </edge>
+    <edge source="6" target="7">
+      <data key="d11">proper</data>
+      <data key="d12">2.0</data>
+      <data key="d13">3.0</data>
+      <data key="d14">overlap</data>
+      <data key="d15">overlap</data>
+    </edge>
+    <edge source="7" target="8">
+      <data key="d11">proper</data>
+      <data key="d12">2.0</data>
+      <data key="d13">1.0</data>
+      <data key="d14">overlap</data>
+      <data key="d15">contains</data>
+    </edge>
+    <edge source="8" target="10">
+      <data key="d11">proper</data>
+      <data key="d12">1.0</data>
+      <data key="d13">1.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">inside</data>
+    </edge>
+    <edge source="8" target="12">
+      <data key="d11">proper</data>
+      <data key="d12">1.0</data>
+      <data key="d13">1.0</data>
+      <data key="d14">overlap</data>
+      <data key="d15">inside</data>
+    </edge>
+    <edge source="9" target="11">
+      <data key="d11">proper</data>
+      <data key="d12">5.0</data>
+      <data key="d13">5.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">inside</data>
+    </edge>
+    <edge source="9" target="14">
+      <data key="d11">proper</data>
+      <data key="d12">1.0</data>
+      <data key="d13">4.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">overlap</data>
+    </edge>
+    <edge source="11" target="13">
+      <data key="d11">proper</data>
+      <data key="d12">2.0</data>
+      <data key="d13">3.0</data>
+      <data key="d14">overlap</data>
+      <data key="d15">overlap</data>
+    </edge>
+    <edge source="12" target="13">
+      <data key="d11">proper</data>
+      <data key="d12">3.0</data>
+      <data key="d13">3.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">inside</data>
+    </edge>
+    <edge source="12" target="14">
+      <data key="d11">proper</data>
+      <data key="d12">1.0</data>
+      <data key="d13">3.0</data>
+      <data key="d14">contains</data>
+      <data key="d15">inside</data>
+    </edge>
+    <data key="d0">Intersection Graph (filtered) — 122 (|V|=12, |E|=20)</data>
+  </graph>
+</graphml>

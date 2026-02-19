@@ -1,0 +1,11 @@
+{
+  "source": "graphs/n12/misr_filtered_000.json",
+  "K": 6,
+  "grid_sizes": {
+    "|X|": 33,
+    "|Y|": 34,
+    "|G|": 1122
+  },
+  "topN": 0,
+  "candidates": []
+}

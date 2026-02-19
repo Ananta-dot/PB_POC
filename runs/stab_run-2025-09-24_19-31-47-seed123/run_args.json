@@ -1,0 +1,22 @@
+{
+  "seed": 123,
+  "n_start": 12,
+  "n_target": 40,
+  "rounds_per_n": 12,
+  "seeds_per_round": 48,
+  "local_time_per_seed": 3.5,
+  "elites_to_train": 128,
+  "batch_size": 48,
+  "train_steps_per_round": 120,
+  "temperature": 1.1,
+  "top_p": 0.92,
+  "alpha_ilp": 0.55,
+  "beta_lp": 0.08,
+  "gurobi_threads": 0,
+  "lift_step": 4,
+  "base_grid": 64,
+  "base_side": 4,
+  "grid_growth": 1.04,
+  "motifs_on": true,
+  "candidate_lines": "right_top"
+}
